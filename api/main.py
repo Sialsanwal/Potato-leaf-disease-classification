@@ -7,7 +7,7 @@ import tensorflow as tf
 
 
 
-app= FastAPI()
+app = FastAPI()
 
 MODEL = tf.keras.models.load_model("../saved_models/1")
 CLASS_NAMES =["Early Blight","Late Blight","Healthy"]
@@ -16,7 +16,7 @@ CLASS_NAMES =["Early Blight","Late Blight","Healthy"]
 async def ping():
     return "Hello World"
 def read_file_as_image(data) ->np.ndarray:
-    image= np.array(Image.open(BytesIO(data)))
+    image = np.array(Image.open(BytesIO(data)))
     return image
 @app.post("/predict")
 async def predict(
