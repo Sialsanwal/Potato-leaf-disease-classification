@@ -9,6 +9,9 @@ from tensorflow.python.client import device_lib
 device_lib.list_local_devices()
 
 app = FastAPI()
+MODEL = tf.keras.models.load_model("../saved_models/1")
+CLASS_NAME = ["Early Blight", "Late Blight", "Healthy"]
+
 @app.get("/ping")
 async def ping():
     return "Hello I am Alive"
@@ -23,9 +26,15 @@ async def predict(
 
 ):
     image = read_file_as_image(await file.read())
-
-
-    pass
+    img_batch = np.expand_dims(image,0)
+    predictions = MODEL.predict(img_batch)
+    predicted_class= CLASS_NAME[np.argmax(predictions[0])]
+    confidence = np.max(predictions[0])
+    print(predicted_class,confidence)
+    return {
+        "class":predicted_class,
+        "confidence": float(confidence)
+    }
 
 
 
